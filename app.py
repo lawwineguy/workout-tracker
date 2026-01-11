@@ -28,8 +28,7 @@ with st.form("log_form"):
     
     if st.form_submit_button("SAVE WORKOUT"):
         new_data = pd.DataFrame([{"Date": date.strftime('%Y-%m-%d'), "Week": week, "Day": day, "Exercise": ex, "Metric1": m1, "Metric2": m2}])
-        existing_data = conn.read(worksheet="Sheet1")
-        updated_df = pd.concat([existing_data, new_data], ignore_index=True)
+existing_data = conn.read(ttl=0)        updated_df = pd.concat([existing_data, new_data], ignore_index=True)
         conn.update(worksheet="Sheet1", data=updated_df)
         st.success("Lift Recorded!")
         st.balloons()
