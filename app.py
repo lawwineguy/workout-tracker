@@ -5,7 +5,6 @@ from datetime import datetime
 
 st.set_page_config(page_title="6-Week Log", page_icon="💪")
 
-# This is the section where the error was happening
 st.markdown("""
 <style>
     .stButton>button { width: 100%; border-radius: 20px; height: 3em; background-color: #007bff; color: white; }
@@ -14,10 +13,9 @@ st.markdown("""
 
 st.title("💪 6-Week Workout Tracker")
 
-# Connect to Google Sheets
+# Connect using the official connection name
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# Simple form for logging
 with st.form("log_form"):
     date = st.date_input("Date", datetime.now())
     week = st.selectbox("Week", range(1, 7))
@@ -27,9 +25,15 @@ with st.form("log_form"):
     m2 = st.number_input("Reps", min_value=0)
     
     if st.form_submit_button("SAVE WORKOUT"):
+        # Create the new entry
         new_data = pd.DataFrame([{"Date": date.strftime('%Y-%m-%d'), "Week": week, "Day": day, "Exercise": ex, "Metric1": m1, "Metric2": m2}])
-existing_data = conn.read(ttl=0)        updated_df = pd.concat([existing_data, new_data], ignore_index=True)
-        conn.update(worksheet="Sheet1", data=updated_df)
+        
+        # Read existing data and add the new row
+        existing_data = conn.read()
+        updated_df = pd.concat([existing_data, new_data], ignore_index=True)
+        
+        # Update the sheet
+        conn.update(data=updated_df)
         st.success("Lift Recorded!")
         st.balloons()
         
