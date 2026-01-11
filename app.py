@@ -12,7 +12,7 @@ st.markdown("""
     div.stButton > button {width: 100%; height: 4em; font-size: 20px; background-color: #007bff; color: white; border-radius: 10px;}
     .stTextInput input {font-size: 18px !important;}
 </style>
-""", unsafe_allow_name=True)
+unsafe_allow_html=True
 
 st.title("🏋️‍♂️ Workout Tracker")
 
